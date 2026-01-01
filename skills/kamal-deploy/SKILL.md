@@ -39,13 +39,22 @@ builder:
   arch: amd64
 ```
 
-## Health Endpoint
+## Health Endpoint (Priority Order)
 
-App must respond 200 on `/up` at port 80 (default).
+**1. Default `/up`**: App responds 200 on `/up` at port 80 → no extra config needed.
 
-**Custom path**: Add `healthcheck.path` to proxy config.
+**2. Custom path**: App has different health endpoint → configure in proxy:
+```yaml
+proxy:
+  healthcheck:
+    path: /
+    interval: 5
+    timeout: 3
+```
 
-**No health endpoint**: Use Caddy. Copy templates from `assets/` and customize:
+**3. No health endpoint (last resort)**: Use Caddy as reverse proxy.
+
+Copy templates from `assets/` and customize:
 - `assets/Caddyfile` → project `Caddyfile`
 - `assets/start.sh` → project `start.sh`
 
